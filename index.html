@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>불길한 달력 2</title>
+
+  <style>
+    @font-face {
+      font-family: 'BookkMyungjo';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/BookkMyungjo-Lt.woff2') format('woff2');
+      font-weight: 400;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'BookkMyungjo';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/BookkMyungjo-Bd.woff2') format('woff2');
+      font-weight: 700;
+      font-display: swap;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: 'BookkMyungjo', serif;
+      color: #fff;
+      background: #000 url('https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExYmd5dXFuamh6eG9ibXphYXhkeXlyeTlicG5uM2g3c3oyZDhpbGhxYSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/BdJpejpTDgI39DunGa/giphy.gif') center / cover no-repeat;
+      line-height: 1.5;
+    }
+    main { width: min(920px, 100%); margin: 50px auto; padding: 0 16px; }
+
+    h1 { margin: 0 0 8px; font-size: 36px; font-weight: 700; }
+
+    h2 { margin: 16px 0 8px; font-size: 18px; font-weight: 700; }
+
+    p { margin: 0 0 10px; }
+
+    label { display: block; margin: 12px 0 4px; font-weight: 700; }
+    input[type="text"], input[type="date"] {
+      width: 100%; border: 1px solid #fff; background: transparent; color: #fff;
+      padding: 8px; outline: none; font-family: inherit;
+    }
+    input::placeholder { color: #fff; opacity: 0.8; }
+
+    .layout { display: grid; grid-template-columns: 1fr; gap: 16px; align-items: start; }
+    @media (min-width: 768px) { .layout { grid-template-columns: 1fr 1fr; } }
+    .section { display: grid; gap: 12px; }
+
+    #monitor { font-size: 18px; margin: 0; }
+    ul { margin: 8px 0 0 18px; padding: 0; font-size:14px; }
+    li { margin: 4px 0; color: ff3131;}
+
+    hr { margin: 16px 0; border: none; border-top: 1px solid rgba(255,255,255,0.3); }
+
+
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1) brightness(1.8);
+    opacity: 1;
+  }
+
+  #white { color:#ffffff; }
+
+  main > h2 { color: #3631ff; }
+  main > h2 + ul { color: #ff3131; }
+
+
+
+  </style>
+</head>
+
+<body>
+  <main>
+    <h1>몇 번의 불길한 날을 지나쳤을까?</h1>
+    <p>이름과 태어난 날을 입력하면 간단한 미신 통계가 나타납니다.</p>
+
+    <div class="layout">
+      <section class="section" aria-labelledby="inputs">
+        <label for="name">이름</label>
+        <input id="name" type="text" placeholder="예: 김섬뜩" oninput="render()" autocomplete="off" />
+
+        <label for="birth">태어난 날</label>
+        <input id="birth" type="date" onchange="render()" />
+      </section>
+
+      <section class="section" aria-labelledby="results">
+        <div id="monitor">입력 대기 중…</div>
+        <div id="meta"></div>
+        <ul id="extra"></ul>
+      </section>
+    </div>
+
+    <hr />
+
+<h2 id="white">시간/숫자 의미</h2>
+
+<ul>
+  <li><b id="white">자정(00:00)</b> — 하루의 끝과 시작이 겹치는 '경계의 시간'으로, 두 세계의 문이 열리는 순간이라고 여겨졌습니다. <br>과학적으로는 하루의 피로가 누적되고 생체리듬이 휴식을 준비하며 심리적으로 예민해지기 쉬운 때입니다.</li>
+  <li><b id="white">3:33</b> — 서양에서는 '악마의 시간(The Devil’s Hour)'으로 불립니다. 예수가 사망한 오후 3시를 정면으로 조롱하는 시간이자,<br> 성스러운 삼위일체를 모독하는 시간으로 여겨 악마의 힘이 가장 강해진다고 믿습니다.<br>이 때문에 악몽, 가위눌림, 환각 등을 초자연적 현상으로 해석하곤 합니다.</li>
+  <li><b id="white">4:44</b> — 한자 문화권에서 '죽음(死)'을 연상시키는 숫자 '4'가 겹쳐 불안감을 극대화하는 시간입니다. 동시에 과학적으로는 체온과 신체 기능이<br>최저점에 이르는 '생체리듬의 저점(Circadian Nadir)'으로, 실제 병원에서 사망률이 가장 높은 시간이기도 해 신체가 가장 취약한 순간으로<br>알려져 있습니다.</li>
+  <li><b id="white">13일의 금요일</b> — 서양 최고의 불운의 상징으로, '13'이라는 숫자(최후의 만찬의 13번째 손님, 유다)와 '금요일'(예수가 십자가에 못 박힌 날)이라는<br>두 가지 불운이 겹친 날입니다. 특히 1307년 10월 13일 금요일에 성전 기사단이 대대적으로 체포, 처형당한 사건으로 저주의 날이라는 인식이 확고해졌습니다.</li>
+  <li><b id="white">보름달</b> — 달빛이 가장 강한 밤으로, 인간의 광기와 충동에 영향을 준다는 오랜 믿음이 있습니다.<br>'광인'을 뜻하는 'Lunatic'의 어원이 달(Luna)일 정도입니다. 과학적으로는 연관성이 증명되지 않았지만, 과거 전기가 없던 시절<br> 보름달이 수면을 방해하고 야간 활동을 늘려 사건·사고율을 높였을 것이라는 가설이 설득력을 얻고 있습니다.</li>
+</ul>
+
+
+
+  <script>
+    const $ = (s) => document.querySelector(s);
+    const fmt = new Intl.NumberFormat('ko-KR');
+
+    function render(){
+      const name = ($("#name").value || "").trim() || "당신";
+      const birthStr = $("#birth").value;
+      const monitor = $("#monitor");
+      const meta = $("#meta");
+      const extra = $("#extra");
+
+      if(!birthStr){
+        monitor.textContent = `${name}… 생년월일을 입력하세요…`;
+        meta.textContent = "예: 1999-12-31";
+        extra.innerHTML = "";
+        return;
+      }
+
+      const birth = new Date(birthStr + "T00:00:00");
+      const now = new Date();
+      if (birth > now){
+        monitor.textContent = "미래 날짜는 사용할 수 없습니다.";
+        meta.textContent = "";
+        extra.innerHTML = "";
+        return;
+      }
+
+      const f13Count = countFriday13ths(birth, now);
+      const nextF13 = nextFriday13th(now);
+      const ddayF13 = daysBetween(startOfDay(now), startOfDay(nextF13));
+      const scary333 = countTimeOccurrences(birth, now, 3, 33);
+      const ominous444 = countTimeOccurrences(birth, now, 4, 44);
+      const midnights = Math.max(0, daysBetween(startOfDay(birth), startOfDay(now)));
+      const todayIsF13 = (now.getDate()===13) && (now.getDay()===5);
+
+      monitor.textContent = todayIsF13
+        ? `${name}, 오늘은 13일의 금요일입니다.`
+        : `${name}, 지금까지 13일의 금요일을 ${fmt.format(f13Count)}번 지나쳤습니다.`;
+
+      meta.textContent = `다음 13일의 금요일까지 D-${fmt.format(ddayF13)} · 자정을 넘긴 횟수 ${fmt.format(midnights)}회`;
+
+      const fullMoons = countFullMoons(birth, now);
+
+      extra.innerHTML = `
+        <li>새벽 3:33을 ${fmt.format(scary333)}번 마주쳤습니다.</li>
+        <li>4:44의 정적을 ${fmt.format(ominous444)}번 지나쳤습니다.</li>
+        <li>보름달을 ${fmt.format(fullMoons)}번 지나쳤습니다.</li>
+        <li>당신이 태어난 요일은 ${weekdayKOR(birth)}입니다.</li>
+        <li>다음 금요일 13일은 ${yyyymmdd(nextF13)}(금)입니다.</li>
+      `;
+    }
+
+    function startOfDay(d){ return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
+    function daysBetween(a,b){ return Math.round((startOfDay(b)-startOfDay(a))/(1000*60*60*24)); }
+    function yyyymmdd(d){
+      const z = (n)=> String(n).padStart(2,"0");
+      return `${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())}`;
+    }
+    function weekdayKOR(d){
+      return ["일요일","월요일","화요일","수요일","목요일","금요일","토요일"][d.getDay()];
+    }
+
+    function countFriday13ths(from, to){
+      let y = from.getFullYear(), m = from.getMonth();
+      if(new Date(y, m, 13) < startOfDay(from)){ m++; if(m>11){m=0;y++;} }
+      let count = 0;
+      while (y < to.getFullYear() || (y === to.getFullYear() && m <= to.getMonth())){
+        const d = new Date(y, m, 13);
+        if (d <= to && d.getDay() === 5) count++;
+        m++; if(m>11){m=0;y++;}
+      }
+      return count;
+    }
+
+    function nextFriday13th(from){
+      let y = from.getFullYear(), m = from.getMonth();
+      let candidate = new Date(y, m, 13);
+      if (candidate <= from) { m++; if(m>11){m=0;y++;} candidate = new Date(y, m, 13); }
+      while (candidate.getDay() !== 5){
+        m++; if(m>11){m=0;y++; }
+        candidate = new Date(y, m, 13);
+      }
+      return candidate;
+    }
+
+    function countTimeOccurrences(birth, now, hh, mm){
+      const start = new Date(birth);
+      const fullDays = Math.max(0, daysBetween(start, now) - 1);
+      let total = fullDays * 2;
+
+      const firstAM = new Date(birth.getFullYear(), birth.getMonth(), birth.getDate(), hh, mm);
+      const firstPM = new Date(birth.getFullYear(), birth.getMonth(), birth.getDate(), hh+12, mm);
+      if (firstAM >= birth) total++;
+      if (firstPM >= birth) total++;
+
+      const todayAM = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hh, mm);
+      const todayPM = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hh+12, mm);
+      if (todayAM > now) total--;
+      if (todayPM > now) total--;
+
+      return Math.max(0, total);
+    }
+
+    function countFullMoons(from, to){
+      const ms = to - from;
+      const synodicDays = 29.530588;
+      const dayMs = 24 * 60 * 60 * 1000;
+      return Math.max(0, Math.floor(ms / (synodicDays * dayMs)));
+    }
+
+    render();
+  </script>
+</body>
+</html>
